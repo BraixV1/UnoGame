@@ -1,0 +1,101 @@
+﻿@page
+@using PlayerEngine
+@model RazorPagesController.Pages.LoadGamePage.Games
+
+@{
+    ViewData["Title"] = "Games";
+}
+<p>
+    <a asp-page="./Create">Start new game</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th class="font-semibold text-purple-800">
+                @Html.DisplayNameFor(model => model.Game[0].Players)
+            </th>
+            <th class="font-semibold text-purple-800">
+                @Html.DisplayNameFor(model => model.Game[0].CreatedAtDt)
+            </th>
+            <th class="font-semibold text-purple-800">
+                @Html.DisplayNameFor(model => model.Game[0].UpdatedAtDt)
+            </th>
+            <th class="font-semibold text-purple-800">
+                Player Count
+            </th>
+            <th class="font-semibold text-purple-800">
+                STATUS
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Game) {
+    <tr>
+        <td class="text-black">
+            <table>
+                <tr>
+                    @if (item.Players != null)
+                    {
+                        foreach (var player in item.Players)
+                        {
+                            if (@player.PlayerType == EPlayertype.AI)
+                            {
+                                <td>@player.NickName </td>
+                            }
+                            else
+                            {
+                                <td>@player.NickName</td>
+                            }
+                            if (item.Players.Count == 0)
+                            {
+                                <td>No players</td>
+                                break;
+                            }
+                        }
+                    }
+                </tr>
+            </table>
+        </td>
+        <td class="bg-purple-700">
+            @Html.DisplayFor(modelItem => item.CreatedAtDt)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UpdatedAtDt)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Players.Count)
+            /
+            @Html.DisplayFor(modelItem => item.MaxPlayer)
+        </td>
+        @switch (item.Status)
+        {
+            case "Playing":
+            {
+                <td class="text-green-400">
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td><a class="hover:bg-purple-400 px-2 py-1 rounded hover:text-yellow-400" asp-page="./JoinGame" asp-route-id="@item.Id">Join game</a></td>
+                break;
+            }
+            case "Completed":
+            {
+                <td class="text-red-400">
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                break;
+            }
+            case "Starting":
+            {
+                <td class="text-yellow-400">
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td><a class="hover:bg-purple-400 px-2 py-1 rounded hover:text-yellow-400" asp-page="./Edit" asp-route-id="@item.Id">Join Lobby</a></td>
+                break;
+            }
+        }
+    </tr>
+    }
+    </tbody>
+</table>

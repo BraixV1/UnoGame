@@ -1,0 +1,24 @@
+﻿@page
+@model RazorPagesController.Pages.LoadGamePage.AddPLayerModel
+
+@{
+    ViewData["Title"] = "Add player";
+}
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="name" class="control-label"></label>
+        <input asp-for="name" class="form-control" />
+        <span asp-validation-for="name" class="text-danger"></span>
+    </div>
+    <label asp-for="Type">Select an option:</label>
+    <select asp-for="Type" asp-items="Model.Options" class="form-control">
+        <option value="">Select...</option>
+    </select>
+    
+    <input type="hidden" name="GameId" value="@Model.State.Id"/>
+
+    <button type="submit">Submit</button>
+</form>
+
+

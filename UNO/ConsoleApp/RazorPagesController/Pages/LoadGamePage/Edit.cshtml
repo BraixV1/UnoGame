@@ -1,0 +1,118 @@
+﻿@page
+@model RazorPagesController.Pages.LoadGamePage.EditModel
+
+@{
+    ViewData["Title"] = "ChangeConfig";
+}
+
+<p class="text-2xl">Game Lobby</p>
+<br/>
+<div class="grid grid-rows-2 grid-cols-3 content-center gap-5">
+    <div class="">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Config.StartCards" class="control-label"></label>
+                <input asp-for="Config.StartCards" class="form-control" />
+                <span asp-validation-for="Config.StartCards" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Config.PlusTwoAmount" class="control-label"></label>
+                <input asp-for="Config.PlusTwoAmount" class="form-control" />
+                <span asp-validation-for="Config.PlusTwoAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Config.PlusFourAmount" class="control-label"></label>
+                <input asp-for="Config.PlusFourAmount" class="form-control" />
+                <span asp-validation-for="Config.PlusTwoAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Config.SevenSwitch" class="form-check-input" />
+                <label class="form-check-label" asp-for="Config.SevenSwitch">Playing seven allows you to change hand with someone</label>
+                <span asp-validation-for="Config.SevenSwitch" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Config.ZeroSwitch" class="form-check-input" />
+                <label class="form-check-label" asp-for="Config.ZeroSwitch">Playing zero will force every player to give their hand to the next person</label>
+                <span asp-validation-for="Config.ZeroSwitch" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Config.PlusTwoSkip" class="form-check-input" />
+                <label class="form-check-label" asp-for="Config.PlusTwoSkip">Playing +2 will skip also that player that has to draw cards</label>
+                <span asp-validation-for="Config.PlusTwoSkip" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Config.PlusFourSKip" class="form-check-input" />
+                <label class="form-check-label" asp-for="Config.PlusFourSKip">Playing +4 will skip also that player that has to draw cards</label>
+                <span asp-validation-for="Config.PlusFourSKip" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Config.WildAmountInGame" class="control-label"></label>
+                <input asp-for="Config.WildAmountInGame" class="form-control" />
+                <span asp-validation-for="Config.WildAmountInGame" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Config.WildPlusFourAmountInGame" class="control-label"></label>
+                <input asp-for="Config.WildPlusFourAmountInGame" class="form-control" />
+                <span asp-validation-for="Config.WildPlusFourAmountInGame" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Config.NumberDrawChance" class="control-label"></label>
+                <input asp-for="Config.NumberDrawChance" class="form-control" />
+                <span asp-validation-for="Config.NumberDrawChance" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Config.ActionCardDrawChance" class="control-label"></label>
+                <input asp-for="Config.ActionCardDrawChance" class="form-control" />
+                <span asp-validation-for="Config.ActionCardDrawChance" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Config.WildCardDrawChance" class="control-label"></label>
+                <input asp-for="Config.WildCardDrawChance" class="form-control" />
+                <span asp-validation-for="Config.WildCardDrawChance" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Config.WildCardPlusFourDrawChance" class="control-label"></label>
+                <input asp-for="Config.WildCardPlusFourDrawChance" class="form-control" />
+                <span asp-validation-for="Config.WildCardPlusFourDrawChance" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Config.LimitBreaker" class="form-check-input" />
+                <label class="form-check-label" asp-for="Config.LimitBreaker">Limit Breaker</label>
+                <span asp-validation-for="Config.LimitBreaker" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="State.MaxPlayers" class="control-label"></label>
+                <input asp-for="State.MaxPlayers" class="form-control" />
+                <span asp-validation-for="State.MaxPlayers" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="State.Id" />
+            <div class="form-group">
+                <input type="submit" value="Save Config" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+    <div class="grid grid-cols-2 gap-4 mb-auto">
+        @foreach (var player in Model.State.Players)
+        {
+            <div>
+                <a>@player.Name</a>
+            </div>
+            <div class="text-right text-red-300">
+                <a class="hover:text-red-400" asp-page="./DeletePlayer" asp-route-Gameid="@Model.State.Id" asp-route-PlayerName="@player.Name">Delete Player</a>
+            </div>
+        }
+    </div>
+    <div>
+        @{
+            if (Model.State.Players.Count == Model.State.MaxPlayers)
+            {
+                <a class="text-green-300 hover:text-green-400" asp-page="./Start" asp-route-id="@Model.State.Id">Start Game</a>
+            }
+            @if (Model.State.MaxPlayers > Model.State.Players.Count)
+            {
+                <a class="text-green-300 hover:text-green-400" asp-page="./AddPlayer" asp-route-id="@Model.Game.Id">Add Player</a>
+            }
+        }
+    </div>
+</div>

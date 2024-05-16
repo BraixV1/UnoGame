@@ -1,0 +1,21 @@
+﻿@page
+@model RazorPagesController.Pages.PlayGamePage.HandSwitchModel
+
+@{
+    ViewData["Title"] = "Switch hands";
+}
+
+
+<form method="post">
+    <label asp-for="PlayerIndex">Select an option:</label>
+    <select asp-for="PlayerIndex" asp-items="Model.Options" class="form-control">
+        <option value="">Select...</option>
+    </select>
+    
+    <!-- Other form fields -->
+    <input type="hidden" name="GameId" value="@Model.GameId" />
+    <input type="hidden" name="PlayerName" value="@Model.PlayerName" />
+    <!-- Other form fields -->
+    
+    <button type="submit">Submit</button>
+</form>

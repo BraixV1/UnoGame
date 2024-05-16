@@ -1,0 +1,122 @@
+﻿@page
+@using CardsEngine
+@model RazorPagesController.Pages.PlayGamePage.Game
+
+@{
+    ViewData["Title"] = "Game";
+    Model._bgColor = Model.UnoGameEngine.GetGameState().OnTable.Color switch
+    {
+        ColorType.Green => "bg-green-300",
+        ColorType.Blue => "bg-blue-300",
+        ColorType.Red => "bg-red-300",
+        ColorType.Yellow => "bg-yellow-300",
+        _ => Model._bgColor
+        };
+    var turnplayer = "";
+    if (Model.UnoGameEngine.GetTurnPlayer().Name.Equals(Model.PlayerName))
+    {
+        turnplayer = "Your turn please select a card";
+    }
+    else
+    {
+        turnplayer = $"{Model.UnoGameEngine.GetTurnPlayer().Name}'s turn";
+    }
+    var index = 0;
+}
+<p class="text-2xl mb-10">
+    @turnplayer
+</p>
+
+<div class="grid grid-cols-3 gap-7 h-50">
+    <div class="">
+        @foreach (var player in Model.UnoGameEngine.GetGameState().Players)
+        {
+            var used = "";
+            <div>
+
+                @if (player.Name == Model.PlayerName)
+                {
+                    used = $"{player.Name}(Me)";
+
+                }
+                else
+                {
+                    used = player.Name;
+                }
+                @used
+                Has
+                @player.GetHand().Count
+                card(s)
+                @player.Shout
+            </div>
+        }
+    </div>
+    <div class="row-span-3 content-center">
+        
+        <div class="@Model._bgColor h-60 grid content-center mx-20 rounded-lg border-solid border-4 border-black">
+            <div class="">
+                <div class=" grid grid-cols-3 text-center text-4xl">
+                    <div></div>
+                    <div class="text-center rounded-full bg-white border-solid border-3 border-black">
+                        @Model.UnoGameEngine.GetGameState().OnTable.GetCardValue()
+                    </div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <div class="grid grid-col-1 gap-10">
+        <div>
+            <a asp-page="./CardPutPage" asp-route-CardIndexNew=@index asp-route-GameidNew="@Model.GameId" asp-route-PlayerNameNew="@Model.PlayerName" asp-route-PickCardNew="True"
+               class="hover:bg-purple-600 px-5 py-4 rounded hover:text-yellow-400 hover:font-semibold hover:duration-300 border-solid border-2 bg-purple-400 ">PickCard</a>
+        </div>
+        <br/>
+        <div>
+            <a asp-page="./CardPutPage" asp-route-CardIndexNew="@index" asp-route-GameidNew="@Model.GameId" asp-route-PlayerNameNew="@Model.PlayerName" asp-route-PickCardNew="False" asp-route-shoutCheck="True"
+               class="hover:bg-purple-600 px-5 py-4 rounded hover:text-yellow-400 hover:font-semibold hover:duration-300 border-solid border-2 bg-purple-400 ">Call Out</a>
+        </div>
+        <br/>
+        <div>
+            <a asp-page="./CardPutPage" asp-route-CardIndexNew="@index" asp-route-GameidNew="@Model.GameId" asp-route-PlayerNameNew="@Model.PlayerName" asp-route-PickCardNew="False" asp-route-Shout="True"
+               class="hover:bg-purple-600 px-5 py-4 rounded hover:text-yellow-400 hover:font-semibold hover:duration-300 border-solid border-2 bg-purple-400">UNO</a>
+        </div>
+    </div>
+</div>
+<div class="grid col-span-2 grid-cols-5 place-content-center gap-4 mx-80 my-10">
+@{
+    foreach (var card in Model.UnoGameEngine.GetPlayer(Model.PlayerName).GetHand()
+        .OrderBy(x => x.Color)
+        .ThenBy(x => x.Type)
+        .ThenBy(card => card.Number))
+    {
+        var backgroundcolor = card.Color switch
+        {
+            ColorType.Green => "bg-green-300",
+            ColorType.Blue => "bg-blue-300",
+            ColorType.Red => "bg-red-300",
+            ColorType.Yellow => "bg-yellow-300",
+            _ => "bg-black"
+        };
+        var display = card.GetCardValue();
+        index++;
+        <div class="@backgroundcolor text-center h-40 palace-content-center grid grid-cols-1 rounded-md border-solid border-2 border-black">
+            @{
+                if (card.Type == CardType.Wild || card.Type == CardType.WildDrawFour)
+                {
+                    <a asp-page="./ColorChange" asp-route-CardIndex="@index" asp-route-Gameid="@Model.GameId" asp-route-PlayerName="@Model.PlayerName">
+                        <div class="mt-14 text-xl text-white">@display</div>
+                    </a>
+                }
+                else
+                {
+                    <a asp-page="./CardPutPage" asp-route-CardIndexNew="@index" asp-route-GameidNew="@Model.GameId" asp-route-PlayerNameNew="@Model.PlayerName" asp-route-PickCardNew="False">
+                        <div class="mt-14 text-xl">@display</div>
+                    </a>
+                }
+            }
+        </div>
+    }
+    index = 0;
+}
+</div>

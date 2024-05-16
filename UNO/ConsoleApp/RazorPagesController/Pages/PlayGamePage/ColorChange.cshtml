@@ -1,0 +1,24 @@
+﻿@page
+@model RazorPagesController.Pages.PlayGamePage.ColorChangeModel
+
+@{
+    ViewData["Title"] = "ColorChange";
+}
+
+<form method="post">
+    <label asp-for="Color">Select an option:</label>
+    <select asp-for="Color" asp-items="Model.Options" class="form-control">
+        <option value="">Select...</option>
+    </select>
+    
+    <!-- Other form fields -->
+    <input type="hidden" name="GameIdReal" value="@Model.GameIdReal" />
+    <input type="hidden" name="CardIndexSaved" value="@Model.CardIndexSaved" />
+    <input type="hidden" name="PickCardSaved" value="@Model.PickCardSaved" />
+    <input type="hidden" name="PlayerNameSaved" value="@Model.PlayerNameSaved" />
+    <!-- Other form fields -->
+    
+    <button type="submit">Submit</button>
+</form>
+
+
